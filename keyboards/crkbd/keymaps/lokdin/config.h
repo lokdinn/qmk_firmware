@@ -20,13 +20,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-//#define USE_MATRIX_I2C
-
 /* Select hand configuration */
 
-#define MASTER_LEFT 
-// #define MASTER_RIGHT
-// #define EE_HANDS
+#define MASTER_LEFT // This is the master side of the keyboard
+
+#define AUTO_SHIFT_TIMEOUT 150 // 150 ms to hold a key
+#define AUTO_SHIFT_ENTER // Enable auto shift for Enter key
+#define NO_AUTO_SHIFT_NUMERIC // Do not auto shift for numeric keys (0-9)
 
 // #define SSD1306OLED
 #undef USE_I2C
@@ -34,11 +34,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define USE_SERIAL_PD2
 
-#define DYNAMIC_MACRO_SIZE 32
+#define DYNAMIC_MACRO_SIZE 32 
 
-// #define TAPPING_FORCE_HOLD
 #define TAPPING_TERM 200 // Time in milliseconds tap vs hold
-//#define RETRO_TAPPING
 
 // Select the font size for the OLED display
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
