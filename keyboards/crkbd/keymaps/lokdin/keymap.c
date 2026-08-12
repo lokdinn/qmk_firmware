@@ -36,7 +36,6 @@ enum {
     TD_COMA,
     TD_PNT,
     TD_ALT,
-    TD_SHIFT,
     TD_OMA_MENU,
 };
 
@@ -46,9 +45,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
 LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L,TD(TD_PC),TD(TD_COMI),
+      KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L,TD(TD_PC),TD(TD_COMI),
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
- TD(TD_SHIFT),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M,TD(TD_COMA),TD(TD_PNT),TD(TD_SLA),KC_ESC,
+      KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M,TD(TD_COMA),TD(TD_PNT),TD(TD_SLA),KC_ESC,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                   TD(TD_OMA_MENU),MO(_LOWER),KC_SPC,     KC_ENT,MO(_RAISE),TD(TD_ALT)
                                       //`--------------------------'  `--------------------------'
@@ -114,7 +113,7 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_SPC), LAG(KC_SPC)), // Tap once for GUI+Space, twice for GUI+Alt+Space
     [TD_ALT] = ACTION_TAP_DANCE_DOUBLE(KC_RALT, KC_LALT), // Tap once for Right Alt, twice for Left Alt 
     //[TD_CTRL] = ACTION_TAP_DANCE_DOUBLE(KC_LCTL, LSFT(KC_LCTL)), // Tap once for Left Control, twice for Left Shift
-    [TD_SHIFT] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_RSFT), // Tap once for Left Shift, twice for Right Shift
+    //[TD_SHIFT] = ACTION_TAP_DANCE_DOUBLE( , KC_RSFT), // Tap once for Left Shift, twice for Right Shift
 };  
 
 //

@@ -8,3 +8,4 @@ OLED_DRIVER = ssd1306 # Permite que se pueda usar la pantalla OLED SSD1306
 EXTRAKEY_ENABLE = yes # Permite que se puedan usar teclas especiales como multimedia, volumen, etc.
 TAP_DANCE_ENABLE = yes # Permite que se puedan usar teclas con doble función.
 DYNAMIC_MACRO_ENABLE = yes # Permite que se puedan grabar macros dinámicas.
+BACKLIGHT_ENABLE = no # Permite que se pueda usar la iluminación de fondo en el teclado.
