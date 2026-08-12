@@ -1,0 +1,10 @@
+MOUSEKEY_ENABLE	= no    # Permite que se pueda usar el teclado como un mouse.
+RGBLIGHT_ENABLE = no    # Permite que se pueda usar la iluminación RGB en el teclado.
+RGB_MATRIX_ENABLE = yes # Permite que se pueda usar la iluminación RGB en el teclado.
+RGB_MATRIX_DRIVER = ws2812 # Permite que se pueda usar la iluminación RGB en el teclado.
+NKRO_ENABLE = yes # Permite que se puedan presionar varias teclas a la vez sin que se bloquee el teclado.
+OLED_ENABLE = yes # Permite mostrar información en la pantalla OLED
+OLED_DRIVER = ssd1306 # Permite que se pueda usar la pantalla OLED SSD1306
+EXTRAKEY_ENABLE = yes # Permite que se puedan usar teclas especiales como multimedia, volumen, etc.
+TAP_DANCE_ENABLE = yes # Permite que se puedan usar teclas con doble función.
+DYNAMIC_MACRO_ENABLE = yes # Permite que se puedan grabar macros dinámicas.
