@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AUTO_SHIFT_TIMEOUT 150 // 150 ms to hold a key
 #define AUTO_SHIFT_ENTER // Enable auto shift for Enter key
 #define NO_AUTO_SHIFT_NUMERIC // Do not auto shift for numeric keys (0-9)
+#define NO_AUTO_SHIFT_TAB // Do not auto shift for Tab key
 
 // #define SSD1306OLED
 #undef USE_I2C

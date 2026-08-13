@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
-// Defines the keycodes used by our macros in process_record_user
+// layer names for readability
 enum layer_names {
     _QWERTY,
     _LOWER,
@@ -32,6 +32,11 @@ enum layer_names {
 enum {
     TD_ALT,
     TD_OMA_MENU
+};
+
+// Custom keycodes
+enum custom_keycodes {
+    MACRO_N = SAFE_RANGE
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -67,7 +72,7 @@ LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX,   KC_AT, KC_LCBR, KC_RCBR, XXXXXXX,                      KC_PERC, KC_HASH, KC_CIRC, KC_LABK, KC_RABK,  KC_DLR,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                      KC_MINS, KC_UNDS, KC_PIPE,  KC_GRV, KC_AMPR, KC_TILD,
+      XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                      KC_MINS, KC_PIPE,  KC_GRV, KC_AMPR, KC_TILD, MACRO_N,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -101,80 +106,94 @@ LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
     [TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LAG(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Alt+Space
-    [TD_ALT] = ACTION_TAP_DANCE_DOUBLE(KC_RALT, KC_LALT) // Tap once for Right Alt, twice for Left Alt 
-};  
+    [TD_ALT]      = ACTION_TAP_DANCE_DOUBLE(KC_RALT, KC_LALT),    // Tap once for Right Alt, twice for Left Alt
+};
 
-//
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case MACRO_N:
+            if (record->event.pressed) {
+                // when keycode MACRO_N is pressed
+                SEND_STRING(
+                    SS_LCTL(SS_LSFT("u")) "00f1 "// Unicode for ñ
+                );
+            }
+            break;
+    }
+
+    return true;
+}
 
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-  if (!is_keyboard_master()) {
-    return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
-}
-return rotation;
+    if (!is_keyboard_master()) {
+        return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
+    }
+    return rotation;
 }
 
 // This function renders the current keyboard state (layer, lock keys, etc) to the OLED display
 void oled_render_layer_state(void) {
     oled_write_P(PSTR("Layer: "), false);
+
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-        oled_write_ln_P(PSTR("Qwerty"), false);
-        break;
+            oled_write_ln_P(PSTR("Qwerty"), false);
+            break;
         case _LOWER:
-        oled_write_ln_P(PSTR("Lower"), false);
-        break;
+            oled_write_ln_P(PSTR("Lower"), false);
+            break;
         case _RAISE:
-        oled_write_ln_P(PSTR("Raise"), false);
-        break;
+            oled_write_ln_P(PSTR("Raise"), false);
+            break;
         case _NUMPAD:
-        oled_write_ln_P(PSTR("Numpad"), false);
-        break;
+            oled_write_ln_P(PSTR("Numpad"), false);
+            break;
         case _ADJUST:
-        oled_write_ln_P(PSTR("Adjust"), false);
-        break;
+            oled_write_ln_P(PSTR("Adjust"), false);
+            break;
     }
 }
 
 // This function is called by the RGB Matrix code to determine what colors to set for each LED
 bool rgb_matrix_indicators_user(void) {
-  #ifdef RGB_MATRIX_ENABLE
-  bool caps_lock_enabled = host_keyboard_led_state().caps_lock;
-  switch (get_highest_layer(layer_state)) {
-    case _LOWER:
-                for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-            rgb_matrix_set_color(i, 0, 0, 255); // Blue color for the LOWER layer
-        }
-    break;
+#ifdef RGB_MATRIX_ENABLE
+    bool caps_lock_enabled = host_keyboard_led_state().caps_lock;
 
-    case _RAISE:
-        for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-            rgb_matrix_set_color(i, 0, 255, 0); // Green color for the RAISE layer
-        }
-    break;
-
-    case _NUMPAD:
-        for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-            rgb_matrix_set_color(i, 255, 255, 0); // Yellow color for the NUMPAD layer
-        }
-    break;
-
-    case _ADJUST:
-        for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-            rgb_matrix_set_color(i, 94, 53, 168); // Purple color for the ADJUST layer
-        }
-    break;
-
-    default:
-        if (caps_lock_enabled) {
+    switch (get_highest_layer(layer_state)) {
+        case _LOWER:
             for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-                rgb_matrix_set_color(i, 255, 0, 0); // Red color for Caps Lock
+                rgb_matrix_set_color(i, 0, 0, 255);  // Blue color for the LOWER layer
             }
-        }
-    break;
-    }
-  #endif
+            break;
 
+        case _RAISE:
+            for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
+                rgb_matrix_set_color(i, 0, 255, 0);  // Green color for the RAISE layer
+            }
+            break;
+
+        case _NUMPAD:
+            for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
+                rgb_matrix_set_color(i, 255, 255, 0);  // Yellow color for the NUMPAD layer
+            }
+            break;
+
+        case _ADJUST:
+            for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
+                rgb_matrix_set_color(i, 94, 53, 168);  // Purple color for the ADJUST layer
+            }
+            break;
+
+        default:
+            if (caps_lock_enabled) {
+                for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
+                    rgb_matrix_set_color(i, 255, 0, 0);  // Red color for Caps Lock
+                }
+            }
+            break;
+    }
+#endif
     return false;
 }
 
@@ -188,20 +207,24 @@ const char code_to_name[60] = {
     'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',
     '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
 
-    void set_keylog(uint16_t keycode, keyrecord_t *record) {
-      char name = ' ';
-      // If the keycode is a modifier or layer tap key, we need to mask it to get the actual keycode
-      if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
-          if (keycode < 60) {
-            name = code_to_name[keycode];
-        }
+void set_keylog(uint16_t keycode, keyrecord_t *record) {
+    char name = ' ';
 
-        // Update the keylog string with the keycode and its corresponding name
-        snprintf(keylog_str, sizeof(keylog_str), "%dx%d, k%2d : %c",
-           record->event.key.row, record->event.key.col,
-           keycode, name);
+    // If the keycode is a modifier or layer tap key, we need to mask it to get the actual keycode
+    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
+        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) {
+        keycode = keycode & 0xFF;
     }
+
+    if (keycode < 60) {
+        name = code_to_name[keycode];
+    }
+
+    // Update the keylog string with the keycode and its corresponding name
+    snprintf(keylog_str, sizeof(keylog_str), "%dx%d, k%2d : %c",
+             record->event.key.row, record->event.key.col,
+             keycode, name);
+}
 
     // This function renders the keylog to the OLED display
     void oled_render_keylog(void) {
@@ -216,34 +239,27 @@ const char code_to_name[60] = {
             0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4,
             0};
             oled_write_P(crkbd_logo, false);
-        }
-
-        bool oled_task_user(void) {
-            if (is_keyboard_master()) {
-                oled_render_layer_state();
-                oled_render_keylog();
-            } else {
-                oled_render_logo();
-            }
-            return false;
-        }
-
-        bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-          if (record->event.pressed) {
-            set_keylog(keycode, record);
-        }
-        return true;
     }
 
-#ifdef RGB_MATRIX_ENABLE
-
-    void suspend_power_down_user(void) {
-        rgb_matrix_set_suspend_state(true);
+    bool oled_task_user(void) {
+        if (is_keyboard_master()) {
+            oled_render_layer_state();
+            oled_render_keylog();
+        } else {
+            oled_render_logo();
+        }
+        return false;
     }
 
-    void suspend_wakeup_init_user(void) {
-        rgb_matrix_set_suspend_state(false);
-    }
+    #ifdef RGB_MATRIX_ENABLE
+
+        void suspend_power_down_user(void) {
+            rgb_matrix_set_suspend_state(true);
+        }
+
+        void suspend_wakeup_init_user(void) {
+            rgb_matrix_set_suspend_state(false);
+        }
 #endif
 
 #endif // OLED_ENABLE
