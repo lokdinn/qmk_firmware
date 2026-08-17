@@ -22,8 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // layer names for readability
 enum layer_names {
     _QWERTY,
-    _LOWER,
-    _RAISE,
+    _NAVIGATE,
+    _SYMBOLS,
     _NUMPAD,
     _ADJUST
 };
@@ -49,16 +49,16 @@ LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ESC,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                  TD(TD_OMA_MENU),MO(_LOWER),KC_SPC,     KC_ENT,MO(_RAISE),TD(TD_ALT)
+                                  TD(TD_OMA_MENU),MO(_NAVIGATE),KC_SPC,     KC_ENT,MO(_SYMBOLS),TD(TD_ALT)
                                       //`--------------------------'  `--------------------------'
 
    ),
 
-  [_LOWER] = LAYOUT_split_3x6_3(
+  [_NAVIGATE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE,                      KC_DEL, XXXXXXX, XXXXXXX, XXXXXXX,  KC_PSCR, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE,                      KC_DEL, XXXXXXX, KC_UP, XXXXXXX,  KC_PSCR, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, KC_LSFT, XXXXXXX, XXXXXXX, KC_KB_VOLUME_UP,              KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX, KC_BRIU,
+      XXXXXXX, XXXXXXX, KC_LSFT, XXXXXXX, XXXXXXX, KC_KB_VOLUME_UP,              XXXXXXX, KC_LEFT, KC_DOWN,KC_RIGHT, XXXXXXX, KC_BRIU,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_CAPS, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, KC_KB_VOLUME_DOWN,            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BRID,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -66,16 +66,16 @@ LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     
                                       //`--------------------------'  `--------------------------' 
     ),
 
-  [_RAISE] = LAYOUT_split_3x6_3(
+  [_SYMBOLS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______, KC_EXLM, RALT(KC_SLSH),KC_LPRN,KC_RPRN,XXXXXXX,                    KC_EQL, KC_PLUS, KC_ASTR, KC_SLSH,KC_BACKSLASH,_______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX,   KC_AT, KC_LCBR, KC_RCBR, XXXXXXX,                      KC_PERC, KC_HASH, KC_CIRC, KC_LABK, KC_RABK,  KC_DLR,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                      KC_MINS, KC_PIPE,  KC_GRV, KC_AMPR, KC_TILD, MACRO_N,
+      XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                      MACRO_N, KC_MINS, KC_PIPE,  KC_GRV, KC_AMPR, KC_TILD,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
-                                      //`--------------------------'  `--------------------------'
+                                      //`--------------------------'  `--------------------------'|
       ),
 
   [_NUMPAD] = LAYOUT_split_3x6_3(
@@ -105,7 +105,8 @@ LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LAG(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Alt+Space
+    //[TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LAG(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Alt+Space
+    [TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LGUI(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Space
     [TD_ALT]      = ACTION_TAP_DANCE_DOUBLE(KC_RALT, KC_LALT),    // Tap once for Right Alt, twice for Left Alt
 };
 
@@ -140,11 +141,11 @@ void oled_render_layer_state(void) {
         case _QWERTY:
             oled_write_ln_P(PSTR("Qwerty"), false);
             break;
-        case _LOWER:
-            oled_write_ln_P(PSTR("Lower"), false);
+        case _NAVIGATE:
+            oled_write_ln_P(PSTR("Navigate"), false);
             break;
-        case _RAISE:
-            oled_write_ln_P(PSTR("Raise"), false);
+        case _SYMBOLS:
+            oled_write_ln_P(PSTR("Symbols"), false);
             break;
         case _NUMPAD:
             oled_write_ln_P(PSTR("Numpad"), false);
@@ -161,15 +162,15 @@ bool rgb_matrix_indicators_user(void) {
     bool caps_lock_enabled = host_keyboard_led_state().caps_lock;
 
     switch (get_highest_layer(layer_state)) {
-        case _LOWER:
+        case _NAVIGATE:
             for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-                rgb_matrix_set_color(i, 0, 0, 255);  // Blue color for the LOWER layer
+                rgb_matrix_set_color(i, 0, 0, 255);  // Blue color for the NAVIGATE layer
             }
             break;
 
-        case _RAISE:
+        case _SYMBOLS:
             for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
-                rgb_matrix_set_color(i, 0, 255, 0);  // Green color for the RAISE layer
+                rgb_matrix_set_color(i, 0, 255, 0);  // Green color for the SYMBOLS layer
             }
             break;
 
