@@ -34,11 +34,6 @@ enum {
     TD_OMA_MENU
 };
 
-// Custom keycodes
-enum custom_keycodes {
-    MACRO_N = SAFE_RANGE
-};
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap _QWERTY: Base Layer (Default Layer) */
   [_QWERTY] = LAYOUT_split_3x6_3(
@@ -72,7 +67,7 @@ LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX,   KC_AT, KC_LCBR, KC_RCBR, XXXXXXX,                      KC_PERC, KC_HASH, KC_CIRC, KC_LABK, KC_RABK,  KC_DLR,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                      MACRO_N, KC_MINS, KC_PIPE,  KC_GRV, KC_AMPR, KC_TILD,
+      XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                      KC_INT1, KC_MINS, KC_PIPE,  KC_GRV, KC_AMPR, KC_TILD,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'|
@@ -109,21 +104,6 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LGUI(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Space
     [TD_ALT]      = ACTION_TAP_DANCE_DOUBLE(KC_RALT, KC_LALT),    // Tap once for Right Alt, twice for Left Alt
 };
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case MACRO_N:
-            if (record->event.pressed) {
-                // when keycode MACRO_N is pressed
-                SEND_STRING(
-                    SS_LCTL(SS_LSFT("u")) "00f1 "// Unicode for ñ
-                );
-            }
-            break;
-    }
-
-    return true;
-}
 
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
