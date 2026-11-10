@@ -24,6 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MASTER_LEFT // This is the master side of the keyboard
 
+#define SPLIT_LAYER_STATE_ENABLE // Sync active layer to the slave half (layer colors on both sides)
+#define SPLIT_LED_STATE_ENABLE   // Sync host LED state (Caps Lock) to the slave half
+
 #define AUTO_SHIFT_TIMEOUT 150 // 150 ms to hold a key
 #define AUTO_SHIFT_ENTER // Enable auto shift for Enter key
 #define NO_AUTO_SHIFT_NUMERIC // Do not auto shift for numeric keys (0-9)
