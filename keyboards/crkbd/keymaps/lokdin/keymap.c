@@ -100,8 +100,7 @@ LT(_NUMPAD,KC_TAB),KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    //[TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LAG(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Alt+Space
-    [TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LGUI(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Space
+    [TD_OMA_MENU] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, LAG(KC_SPC)), // Tap once for left GUI(super key), twice for GUI+Alt+Space (app menu)
     [TD_ALT]      = ACTION_TAP_DANCE_DOUBLE(KC_RALT, KC_LALT),    // Tap once for Right Alt, twice for Left Alt
 };
 
