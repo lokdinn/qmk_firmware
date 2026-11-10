@@ -152,18 +152,6 @@ tap_dance_action_t tap_dance_actions[] = {
         }
         return false;
     }
-
-    #ifdef RGB_MATRIX_ENABLE
-
-        void suspend_power_down_user(void) {
-            rgb_matrix_set_suspend_state(true);
-        }
-
-        void suspend_wakeup_init_user(void) {
-            rgb_matrix_set_suspend_state(false);
-        }
-    #endif // RGB_MATRIX_ENABLE
-
 #endif // OLED_ENABLE
 
 #ifdef RGB_MATRIX_ENABLE
