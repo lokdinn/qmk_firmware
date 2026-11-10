@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_TERM 200 // Time in milliseconds tap vs hold
 
 // Select the font size for the OLED display
-#define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
+#define OLED_FONT_H "keyboards/crkbd/keymaps/lokdin/glcdfont.c" // custom font: logo with my own drawing
 
 #ifdef RGB_MATRIX_ENABLE
 #   define RGB_MATRIX_KEYPRESSES // reacts to keypresses
