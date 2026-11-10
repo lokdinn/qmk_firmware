@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
-#include <stdio.h>
 
 // layer names for readability
 enum layer_names {
@@ -177,40 +176,6 @@ bool rgb_matrix_indicators_user(void) {
     return false;
 }
 
-char keylog_str[24] = {};
-
-const char code_to_name[60] = {
-    ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
-    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-    'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',
-    '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
-
-void set_keylog(uint16_t keycode, keyrecord_t *record) {
-    char name = ' ';
-
-    // If the keycode is a modifier or layer tap key, we need to mask it to get the actual keycode
-    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) {
-        keycode = keycode & 0xFF;
-    }
-
-    if (keycode < 60) {
-        name = code_to_name[keycode];
-    }
-
-    // Update the keylog string with the keycode and its corresponding name
-    snprintf(keylog_str, sizeof(keylog_str), "%dx%d, k%2d : %c",
-             record->event.key.row, record->event.key.col,
-             keycode, name);
-}
-
-    // This function renders the keylog to the OLED display
-    void oled_render_keylog(void) {
-        oled_write(keylog_str, false);
-    }
-
     // This function renders the keyboard logo to the OLED display
     void oled_render_logo(void) {
         static const char PROGMEM crkbd_logo[] = {
@@ -224,7 +189,6 @@ void set_keylog(uint16_t keycode, keyrecord_t *record) {
     bool oled_task_user(void) {
         if (is_keyboard_master()) {
             oled_render_layer_state();
-            oled_render_keylog();
         } else {
             oled_render_logo();
         }
