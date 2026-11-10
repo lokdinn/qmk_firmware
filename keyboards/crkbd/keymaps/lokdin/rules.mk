@@ -10,3 +10,7 @@ TAP_DANCE_ENABLE = yes # Permite que se puedan usar teclas con doble función.
 DYNAMIC_MACRO_ENABLE = yes # Permite que se puedan grabar macros dinámicas.
 BACKLIGHT_ENABLE = no # Permite que se pueda usar la iluminación de fondo en el teclado.
 AUTO_SHIFT_ENABLE = yes # Permite que se puedan usar teclas con doble función usando shift.
+
+MAGIC_ENABLE = no # No se usa; libera ~1 KB
+SPACE_CADET_ENABLE = no # No se usa; libera espacio
+GRAVE_ESC_ENABLE = no # No se usa; libera espacio
